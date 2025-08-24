@@ -52,3 +52,15 @@ Join (Select Name, genre_id from public.genre
 where Name='Rock') as g ON g.genre_id=t.genre_id
 order by c.email ASC
 
+/* Q2: Let's invite the artists who have written the most rock music in our dataset. 
+Write a query that returns the Artist name and total track count of the top 10 rock bands. */
+
+Select Ar.Name, Count(T.track_id)as cnt from Track T
+Join Genre G On T.genre_id=G.genre_id
+Join ALbum A On A.Album_ID=T.Album_ID
+Join Artist Ar ON Ar.Artist_ID=A.Artist_ID
+where G.Name Like 'Rock'
+group by Ar.Name
+Order by cnt desc
+Limit 10
+
