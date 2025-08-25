@@ -121,4 +121,5 @@ Join public.customer c ON i.customer_id=c.customer_id
 group by 1,2,3
 order by 3 asc,4 desc)
 Select * from top_country_spend where row <=1
+<img width="693" height="554" alt="image" src="https://github.com/user-attachments/assets/9409c6f9-9395-469f-9bae-492d8a0c926e" />
 
