@@ -93,3 +93,20 @@ Join album a ON a.album_id=t.album_id
 Join best_sell_artist ba ON ba.artist_id=a.artist_id
 group by 1,2,3, 4
 
+/* Q2: We want to find out the most popular music Genre for each country. We determine the most popular genre as the genre 
+with the highest amount of purchases. Write a query that returns each country along with the top Genre. For countries where 
+the maximum number of purchases is shared return all Genres. */
+
+with populargenre As(
+Select count(il.quantity) as count,c.country,g.genre_id,g.name,
+Row_number()over (Partition by c.country order by count(il.quantity)desc )as row_no
+from  public.invoice_line il
+JOIN invoice i ON i.invoice_id = il.invoice_id
+	JOIN customer c ON c.customer_id = i.customer_id
+	JOIN track t ON t.track_id = il.track_id
+	JOIN genre g ON g.genre_id = t.genre_id
+	group by 2,3,4
+	order by 2 ASC, 1 Desc)
+
+	Select * from populargenre where row_no<=1
+
