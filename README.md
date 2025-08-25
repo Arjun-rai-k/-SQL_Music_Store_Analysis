@@ -71,3 +71,25 @@ Select Name, milliseconds from public.track
 where milliseconds>(Select AVG(milliseconds) from public.track)
 order by milliseconds desc
 
+/* Question Set 3 - Advance */
+
+/* Q1: Find how much amount spent by each customer on artists? Write a query to return customer name, artist name and total spent */
+
+With best_sell_artist AS (
+Select ar.artist_id,ar.name, Sum(il.unit_price*il.quantity) as total from public.invoice_line il
+Join track t ON il.track_id=t.track_id
+Join album a ON a.album_id=t.album_id
+Join public.artist ar ON ar.artist_id=a.artist_id
+group by 1
+order by 3 desc
+limit 1
+)
+
+Select c.customer_id,c.first_name,c.last_name,ba.name, SUM(il.unit_price*il.quantity) as total from public.invoice i
+join customer c on i.customer_id=c.customer_id
+Join public.invoice_line il ON i.invoice_id=il.invoice_id
+Join track t ON il.track_id=t.track_id
+Join album a ON a.album_id=t.album_id
+Join best_sell_artist ba ON ba.artist_id=a.artist_id
+group by 1,2,3, 4
+
