@@ -110,3 +110,15 @@ JOIN invoice i ON i.invoice_id = il.invoice_id
 
 	Select * from populargenre where row_no<=1
 
+ /* Q3: Write a query that determines the customer that has spent the most on music for each country. 
+Write a query that returns the country along with the top customer and how much they spent. 
+For countries where the top amount spent is shared, provide all customers who spent this amount. */
+with top_country_spend AS(
+Select c.first_name,c.last_name,c.country,sum(i.total) as total,
+Row_number() over(Partition by country order by sum(i.total) desc  ) as row
+ from public.invoice i
+Join public.customer c ON i.customer_id=c.customer_id
+group by 1,2,3
+order by 3 asc,4 desc)
+Select * from top_country_spend where row <=1
+
